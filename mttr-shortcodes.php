@@ -221,7 +221,7 @@ if ( !function_exists( 'mttr_icon_shortcode' ) ) {
 			'icon' => '',
 			'size' => '',
 			'before' => '',
-			'middle' => '',
+			'valign' => '',
 			'after' => '',
 
 		), $atts );
@@ -248,7 +248,7 @@ if ( !function_exists( 'mttr_icon_shortcode' ) ) {
 			// Before modifier
 			if ( $a[ 'middle' ] != '' ) {
 
-				$modifiers[] = '  o-icon--middle';
+				$modifiers[] = '  o-icon--' . sanitize_html_class( $a[ 'valign' ] );
 
 			}
 
@@ -272,7 +272,11 @@ if ( !function_exists( 'mttr_icon_shortcode' ) ) {
 
 			ob_start();
 
-				mttr_get_component_template( 'icon', $data );
+				// Set up the icon
+				$icon = new Mttr_Component_Icon();
+				$icon->render_component( $data );
+
+				// Return the thing
 				$return = ob_get_contents();
 
 			ob_get_clean();
