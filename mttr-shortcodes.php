@@ -246,7 +246,7 @@ if ( !function_exists( 'mttr_icon_shortcode' ) ) {
 			}
 
 			// Before modifier
-			if ( $a[ 'middle' ] != '' ) {
+			if ( $a[ 'valign' ] != '' ) {
 
 				$modifiers[] = '  o-icon--' . sanitize_html_class( $a[ 'valign' ] );
 
