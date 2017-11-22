@@ -142,13 +142,13 @@ if ( !function_exists( 'mttr_contact_physical_address_shortcode' ) ) {
 
 			if ( $a[ 'address' ] ) {
 
-				if ( $format == 'short' ) {
+				if ( $a['format'] == 'short' ) {
 
 					return mttr_remove_line_break_formatting( esc_attr( $a[ 'address' ] ) );
 
 				}
 
-				return esc_attr( $a[ 'address' ] );
+				return apply_filters( 'the_content', esc_attr( $a[ 'address' ] ) );
 
 			}
 
@@ -167,13 +167,13 @@ if ( !function_exists( 'mttr_contact_physical_address_shortcode' ) ) {
 /* ---------------------------------------------------------
 *	Output postal address
  ---------------------------------------------------------*/
-add_shortcode( 'mttr_postal_address', 'mttr_contact_physical_address_shortcode' );
+add_shortcode( 'mttr_postal_address', 'mttr_contact_postal_address_shortcode' );
 
-if ( !function_exists( 'mttr_contact_physical_address_shortcode' ) ) {
+if ( !function_exists( 'mttr_contact_postal_address_shortcode' ) ) {
 
-	function mttr_contact_physical_address_shortcode( $atts ) {
+	function mttr_contact_postal_address_shortcode( $atts ) {
 
-		if ( function_exists( 'mttr_get_contact_physical_address' ) ) {
+		if ( function_exists( 'mttr_get_contact_postal_address' ) ) {
 
 			$address = mttr_get_contact_postal_address();
 
@@ -184,13 +184,13 @@ if ( !function_exists( 'mttr_contact_physical_address_shortcode' ) ) {
 
 			if ( $a[ 'address' ] ) {
 
-				if ( $format == 'short' ) {
+				if ( $a['format'] == 'short' ) {
 
 					return mttr_remove_line_break_formatting( esc_attr( $a[ 'address' ] ) );
 
 				}
 
-				return esc_attr( $a[ 'address' ] );
+				return apply_filters( 'the_content', esc_attr( $a[ 'address' ] ) );
 
 			}
 
