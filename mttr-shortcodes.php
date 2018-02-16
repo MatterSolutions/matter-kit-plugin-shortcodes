@@ -292,3 +292,115 @@ if ( !function_exists( 'mttr_icon_shortcode' ) ) {
 	}
 
 }
+
+
+
+
+
+/* ---------------------------------------------------------
+*	Add a shortcode to display a list of posts
+ ---------------------------------------------------------*/
+add_shortcode( 'mttr_posts', 'mttr_add_posts_shortcode' );
+
+if ( !function_exists( 'mttr_add_posts_shortcode' ) ) {
+
+	function mttr_add_posts_shortcode( $atts ) {
+
+		$a = shortcode_atts( array(
+			'id' => false,
+			'style' => 'snippet',
+			'type' => false,
+			'category' => false,
+			'count' => false,
+		), $atts );
+
+		$args = array();
+
+		$args['post_status'] = 'publish';
+
+		if ( $a['count'] ) {
+
+			$args['posts_per_page'] = intval( $a['count'] );
+
+		}
+
+		if ( $a['type'] ) {
+
+			$args['post_type'] = $a['type'];
+
+		}
+
+		if ( $a['type'] == 'post' ) {
+
+			if ( $a['category'] ) {
+
+				$args['cat'] = intval( $a['category'] );
+
+			}
+
+		} else {
+
+			if ( $a['category'] ) {
+
+				$args['tax_query'] = array(
+
+					array(
+						'taxonomy' => $args['post_type'] . '_category',
+						'field'    => 'ID',
+						'terms'    => $categories
+					)
+
+				);
+
+			}
+
+		}
+
+		if ( $a['id'] ) {
+
+			$args['post__in'] = explode( ',', $a['id'] );
+			$args['orderby'] = 'post__in';
+			$args['order'] = 'ASC';
+
+		} else {
+
+			// This applies ordering filters from the CPT plugins
+			apply_filters( 'mttr_latest_posts_' . $a['type'], $args );
+
+		}
+
+		$q = new WP_Query( $args );
+		$list = array();
+
+		if ( $q->have_posts() ) {
+
+			while ( $q->have_posts() ) {
+
+				$q->the_post();
+				$list[] = get_the_ID();
+
+			}
+
+		}
+
+		wp_reset_postdata();
+
+		// Output grid items
+		$grid = new Mttr_Component_Grid();
+		$data = $grid->get_data( $a['style'], $list );
+
+		// Hide the wrapper
+		$data['listing']['wrap'] = 'u-hard';
+
+		ob_start();
+
+		mttr_get_template( $grid::$component_template_location, $data );
+		$return = ob_get_contents();
+
+		ob_end_clean();
+
+		return $return;
+
+	}
+
+}
