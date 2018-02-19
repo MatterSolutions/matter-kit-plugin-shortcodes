@@ -272,9 +272,13 @@ if ( !function_exists( 'mttr_icon_shortcode' ) ) {
 
 			ob_start();
 
-				// Set up the icon
-				$icon = new Mttr_Component_Icon();
-				$icon->render_component( $data );
+				if ( class_exists( 'Mttr_Component_Icon' ) ) {
+
+					// Set up the icon
+					$icon = new Mttr_Component_Icon();
+					$icon->render_component( $data );
+
+				}
 
 				// Return the thing
 				$return = ob_get_contents();
